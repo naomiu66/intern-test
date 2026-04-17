@@ -1,11 +1,12 @@
-import type { CountryCardProps } from "../types/components/CountryCardProps";
+import type { CountryCardProps } from "../types/components/ICountryCardProps";
+import styles from "./CountryCard.module.scss";
 
-export const CountryCard = ({ name, flag }: CountryCardProps) => {
+export const CountryCard = ({ name, flag, onClick }: CountryCardProps) => {
   return (
     <>
-      <div>
-        <h3>{name}</h3>
-        <img src={flag} />
+      <div className={styles.container} onClick={onClick}>
+        <img src={flag} className={styles.img} />
+        <h3 className={styles.name}>{name}</h3>
       </div>
     </>
   );

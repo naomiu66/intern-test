@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import "./App.css";
 import type { Country } from "./types/Country";
 import { countryApi } from "./api/countryApi";
+import styles from "./App.module.scss"
 import { CountryCard } from "./components/CountryCard";
+import { CountryDetailsModal } from "./components/CountryDetailsModal";
 
 function App() {
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [countries, setCountries] = useState<Country[]>([]);
   const [search, setSearch] = useState<string>("");
   const [region, setRegion] = useState<string>("");
@@ -40,11 +43,21 @@ function App() {
     setRegion(e.target.value);
   };
 
+  const onCountryClick = (country: Country) => {
+    setSelectedCountry(country);
+    setModalVisible(true);
+  }
+
+  const onModalClose = () => {
+    setModalVisible(false);
+    setSelectedCountry(null);
+  }
+
   return (
     <>
-      <div className="head-bar">
-        <input placeholder="Search by name" onChange={onSearchChange}></input>
-        <select onChange={onRegionChange}>
+      <div className={styles.headbar}>
+        <input className={styles.search} placeholder="Search by name" onChange={onSearchChange}></input>
+        <select className={styles.select} onChange={onRegionChange}>
           <option value="">All</option>
           <option value="Africa">Africa</option>
           <option value="Americas">Americas</option>
@@ -53,11 +66,14 @@ function App() {
           <option value="Oceania">Oceania</option>
         </select>
       </div>
-      <div className="country-list">
+      <hr></hr>
+      <div className={styles.countrylist}>
         {filteredCountries.map((country) => (
-          <CountryCard name={country.name} flag={country.flag} />
+          <CountryCard name={country.name} flag={country.flag} onClick={() => onCountryClick(country)}/>
         ))}
       </div>
+
+      <CountryDetailsModal isOpen={isModalVisible} onClose={onModalClose} country={selectedCountry!}/>
     </>
   );
 }

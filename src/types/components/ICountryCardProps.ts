@@ -1,4 +1,5 @@
 export interface CountryCardProps {
     name: string,
-    flag: string
+    flag: string,
+    onClick: () => void,
 }

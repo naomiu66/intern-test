@@ -9,6 +9,8 @@ function mapICountryToCountry(data: ICountry): Country {
     name: data.name.common,
     flag: data.flags.png,
     region: data.region,
+    capital: data.capital[0],
+    population: data.population,
   };
 }
 
@@ -25,12 +27,15 @@ function mapICountryDetailsToDetails(data: ICountryDetails): CountryDetails {
 export const countryApi = {
   async getAll(): Promise<Country[]> {
     console.log(`[API] Get all countries`);
-    const response = await fetch(`${API_URL}/all?fields=name,flags,region`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
+    const response = await fetch(
+      `${API_URL}/all?fields=name,flags,region,population,capital`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
       },
-    });
+    );
 
     const data: ICountry[] = await response.json();
     return data.map((res) => mapICountryToCountry(res));
@@ -48,5 +53,5 @@ export const countryApi = {
     const data = await response.json();
 
     return mapICountryDetailsToDetails(data);
-  }
+  },
 };
